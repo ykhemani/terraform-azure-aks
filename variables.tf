@@ -48,6 +48,21 @@ variable aks_default_node_pool_vm_size {
   default     = "Standard_D2_v2"
 }
 
+variable aks_default_node_min_count {
+  type        = number
+  default     = 1
+}
+
+variable aks_default_node_max_count {
+  type        = number
+  default     = 4
+}
+
+variable aks_default_node_node_count {
+  type        = number
+  default     = 1
+}
+
 variable ssh_public_key {
   type        = string
 }

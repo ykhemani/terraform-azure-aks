@@ -1,18 +1,19 @@
-data terraform_remote_state foundation {
+data "terraform_remote_state" "foundation" {
   backend = "remote"
-  config  = {
+  config = {
     organization = var.org
-    workspaces   = {
-      name       = var.foundation_workspace
+    workspaces = {
+      name = var.foundation_workspace
     }
   }
 }
 
-resource azurerm_kubernetes_cluster k8s {
-  name                  = var.aks_name
-  location              = data.terraform_remote_state.foundation.outputs.rg_location
-  resource_group_name   = data.terraform_remote_state.foundation.outputs.rg_name
-  dns_prefix            = var.aks_dns_prefix
+# reference: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster
+resource "azurerm_kubernetes_cluster" "k8s" {
+  name                = var.aks_name
+  location            = data.terraform_remote_state.foundation.outputs.rg_location
+  resource_group_name = data.terraform_remote_state.foundation.outputs.rg_name
+  dns_prefix          = var.aks_dns_prefix
 
   default_node_pool {
     name                = var.aks_default_node_pool_name
@@ -37,11 +38,11 @@ resource azurerm_kubernetes_cluster k8s {
   }
 
   tags = {
-    owner                   = var.owner
-    se-region               = var.se-region
-    purpose                 = var.purpose
-    ttl                     = var.ttl
-    terraform               = "true"
+    owner     = var.owner
+    se-region = var.se-region
+    purpose   = var.purpose
+    ttl       = var.ttl
+    terraform = "true"
   }
 
 }
